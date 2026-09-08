@@ -1,7 +1,8 @@
-﻿# 📧 AI Email Assistant & Intelligent NLP Auto-Responder
+# 📧 AI Email Assistant & Intelligent NLP Auto-Responder
 
 <div align="center">
 
+[![CI](https://github.com/amirthn6533/ai-email-assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/amirthn6533/ai-email-assistant/actions)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
