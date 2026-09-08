@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Email Assistant - Live Interactive Copilot Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row items-center justify-between border-b border-slate-800 pb-6 mb-8 gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🤖</span>
+          <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">
+            AI Email Assistant Copilot
+          </h1>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">Live Interactive In-Browser Demo &middot; NLP Classification &middot; LLM Tone Modulation</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="https://github.com/amirthn6533/ai-email-assistant" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition flex items-center gap-2 border border-slate-700">
+          <i class="fab fa-github"></i> View GitHub Repo
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Input Column -->
+      <div class="lg:col-span-6 space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fas fa-inbox text-blue-400"></i> Incoming Email Input
+            </h2>
+            <button onclick="loadSampleEmail()" class="text-xs text-blue-400 hover:text-blue-300 underline font-medium">
+              Load Sample Client Email
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Subject</label>
+              <input id="emailSubject" type="text" placeholder="e.g. Urgent: Project timeline revision request" 
+                     class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email Body Content</label>
+              <textarea id="emailBody" rows="6" placeholder="Paste or type any incoming client or employer email here..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Reply Tone</label>
+                <select id="replyTone" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                  <option value="Executive & Professional">👔 Executive & Professional</option>
+                  <option value="Friendly & Welcoming">🤝 Friendly & Welcoming</option>
+                  <option value="Firm & Assertive (Negotiation)">💼 Firm & Assertive</option>
+                  <option value="Concise & Direct">⚡ Concise & Direct</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Action Intent</label>
+                <select id="actionIntent" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500">
+                  <option value="Accept & Confirm Schedule">Accept & Schedule Call</option>
+                  <option value="Request Further Details">Request More Details</option>
+                  <option value="Polite Decline">Polite Decline</option>
+                  <option value="Propose Alternative Terms">Counter-Offer / Alternatives</option>
+                </select>
+              </div>
+            </div>
+
+            <button onclick="runAiAnalysis()" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20">
+              <i class="fas fa-bolt"></i> Run AI Analysis & Draft Reply
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Column -->
+      <div class="lg:col-span-6 space-y-6">
+        <!-- Classification Metrics -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <i class="fas fa-chart-pie text-purple-400"></i> NLP Triage & Sentiment Analysis
+          </h2>
+
+          <div class="grid grid-cols-3 gap-3 text-center mb-4">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div class="text-xs text-slate-400">Category</div>
+              <div id="metricCategory" class="text-sm font-bold text-blue-400 mt-1">Ready</div>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div class="text-xs text-slate-400">Urgency Level</div>
+              <div id="metricUrgency" class="text-sm font-bold text-yellow-400 mt-1">Normal</div>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+              <div class="text-xs text-slate-400">Sentiment</div>
+              <div id="metricSentiment" class="text-sm font-bold text-emerald-400 mt-1">Neutral</div>
+            </div>
+          </div>
+
+          <!-- Generated AI Response -->
+          <div class="mt-4">
+            <div class="flex justify-between items-center mb-2">
+              <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider">AI Suggested Draft</label>
+              <button onclick="copyReply()" id="copyBtn" class="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium">
+                <i class="fas fa-copy"></i> Copy to Clipboard
+              </button>
+            </div>
+            <div id="draftContainer" class="bg-slate-950 border border-slate-800 rounded-xl p-4 min-h-[160px] text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-wrap">
+Click "Run AI Analysis & Draft Reply" or "Load Sample Client Email" above to experience real-time AI reply generation and sentiment analysis.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadSampleEmail() {
+      document.getElementById('emailSubject').value = "Inquiry: ZVB Smart Electrical Automation Quote for Sofia Office";
+      document.getElementById('emailBody').value = "Hello Amir,\n\nWe came across your ZVB Electrical automation profile and are looking to upgrade the electrical panels and access control for our 350 sqm commercial office in Lozenets, Sofia.\n\nCould you provide a detailed quotation and let us know your earliest availability for an on-site inspection this week?\n\nBest regards,\nGeorgi Ivanov\nTechHub Sofia";
+      document.getElementById('replyTone').value = "Executive & Professional";
+      document.getElementById('actionIntent').value = "Accept & Confirm Schedule";
+    }
+
+    function runAiAnalysis() {
+      const subject = document.getElementById('emailSubject').value.trim();
+      const body = document.getElementById('emailBody').value.trim();
+      const tone = document.getElementById('replyTone').value;
+      const intent = document.getElementById('actionIntent').value;
+
+      if (!body) {
+        alert("Please enter or load an email message first.");
+        return;
+      }
+
+      // Simulated NLP classification
+      let category = "Business Inquiry";
+      let urgency = "Normal (48h)";
+      let sentiment = "Positive";
+
+      const lower = (subject + " " + body).toLowerCase();
+      if (lower.includes("urgent") || lower.includes("asap") || lower.includes("immediately")) {
+        urgency = "🔴 Urgent (Immediate)";
+      }
+      if (lower.includes("quote") || lower.includes("quotation") || lower.includes("commercial")) {
+        category = "💼 Commercial Deal";
+      } else if (lower.includes("job") || lower.includes("interview") || lower.includes("resume")) {
+        category = "🎯 Career & Hiring";
+      }
+
+      document.getElementById('metricCategory').innerText = category;
+      document.getElementById('metricUrgency').innerText = urgency;
+      document.getElementById('metricSentiment').innerText = sentiment;
+
+      // Generate response
+      let draft = "";
+      if (tone.includes("Executive")) {
+        draft = `Dear Georgi,
+
+Thank you for reaching out regarding the electrical automation and panel upgrade for your commercial facility in Sofia.
+
+I have reviewed your project requirements and would be glad to conduct a comprehensive on-site engineering audit. I can make myself available this Thursday at 10:30 AM or Friday afternoon at 2:00 PM to inspect the site and finalize the technical specifications.
+
+In the meantime, feel free to review our technical credentials and portfolio. Looking forward to your confirmation.
+
+Best regards,
+Amir Tahani
+Lead Systems Engineer | ZVB Radar
+Sofia, Bulgaria`;
+      } else if (tone.includes("Friendly")) {
+        draft = `Hi Georgi,
+
+Great to hear from you! We'd love to help upgrade your office panels and access control in Lozenets.
+
+I'm available to stop by for a quick on-site survey anytime Thursday or Friday that suits you best. Let me know what time works on your end!
+
+Cheers,
+Amir`;
+      } else if (tone.includes("Concise")) {
+        draft = `Hello Georgi,
+
+Received. I am available for the site inspection in Lozenets this Thursday at 10:30 AM. Please confirm if this time works, and I will prepare the preliminary cost estimates.
+
+Regards,
+Amir Tahani`;
+      } else {
+        draft = `Dear Georgi,
+
+Thank you for your inquiry. Regarding your timeline and budget parameters, our engineering team can accommodate the inspection this week once the preliminary scope document is acknowledged.
+
+Please let me know your preferred inspection slot.
+
+Sincerely,
+Amir Tahani`;
+      }
+
+      document.getElementById('draftContainer').innerText = draft;
+    }
+
+    function copyReply() {
+      const text = document.getElementById('draftContainer').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = '<i class="fas fa-check text-emerald-400"></i> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy"></i> Copy to Clipboard';
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
